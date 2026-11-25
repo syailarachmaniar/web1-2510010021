@@ -4,88 +4,7 @@
 // =========================================================
 
 // 1. Data katalog: array yang berisi objek-objek produk
-const katalog = [
-  {
-    id: 1,
-    nama: "Kain Motif Gigi Haruan",
-    kategori: "kain",
-    harga: 185000,
-    gambar: "img/gigi-haruan.svg",
-    deskripsi: "Kain katun 2 meter bermotif zig-zag menyerupai gigi ikan haruan.",
-  },
-  {
-    id: 2,
-    nama: "Kain Motif Kambang Kacang",
-    kategori: "kain",
-    harga: 175000,
-    gambar: "img/kambang-kacang.svg",
-    deskripsi: "Motif bunga kacang yang melambangkan keakraban dan kerukunan.",
-  },
-  {
-    id: 3,
-    nama: "Selendang Iris Pudak",
-    kategori: "aksesoris",
-    harga: 120000,
-    gambar: "img/iris-pudak.svg",
-    deskripsi: "Selendang ringan bermotif irisan daun pudak (pandan).",
-  },
-  {
-    id: 4,
-    nama: "Kain Motif Bintang Bahambur",
-    kategori: "kain",
-    harga: 195000,
-    gambar: "img/bintang-bahambur.svg",
-    deskripsi: "Motif bintang bertaburan di langit malam, simbol harapan dan cita-cita.",
-  },
-  {
-    id: 5,
-    nama: "Kemeja Motif Kulat Karikit",
-    kategori: "pakaian",
-    harga: 245000,
-    gambar: "img/kulat-karikit.svg",
-    deskripsi: "Kemeja lengan pendek bermotif jamur kecil yang tumbuh di batang kayu.",
-  },
-  {
-    id: 6,
-    nama: "Blus Motif Ombak Sinapur Karang",
-    kategori: "pakaian",
-    harga: 230000,
-    gambar: "img/ombak-sinapur-karang.svg",
-    deskripsi: "Blus wanita bermotif ombak yang menerjang karang, lambang keteguhan hati.",
-  },
-  {
-    id: 7,
-    nama: "Kain Motif Naga Balimbur",
-    kategori: "kain",
-    harga: 210000,
-    gambar: "img/naga-balimbur.svg",
-    deskripsi: "Motif naga yang sedang bermain di air, warna cerah dari pewarna alami.",
-  },
-  {
-    id: 8,
-    nama: "Tas Jinjing Motif Daun Jaruju",
-    kategori: "aksesoris",
-    harga: 95000,
-    gambar: "img/daun-jaruju.svg",
-    deskripsi: "Tas kain serbaguna bermotif daun jeruju, tanaman khas rawa Kalimantan.",
-  },
-  {
-    id: 9,
-    nama: "Kemeja Motif Hiris Gagatas",
-    kategori: "pakaian",
-    harga: 255000,
-    gambar: "img/hiris-gagatas.svg",
-    deskripsi: "Kemeja lengan panjang bermotif irisan kue gagatas berbentuk belah ketupat.",
-  },
-  {
-    id: 10,
-    nama: "Masker Kain Motif Ramak Sahang",
-    kategori: "aksesoris",
-    harga: 25000,
-    gambar: "img/ramak-sahang.svg",
-    deskripsi: "Masker kain dua lapis bermotif butiran merica (sahang) yang dihancurkan.",
-  },
-];
+let katalog = [];
 
 // 2. Ambil elemen-elemen HTML yang akan dimanipulasi
 const daftarKatalog = document.querySelector("#daftar-katalog");
@@ -194,3 +113,24 @@ tombolFilter.forEach((tombol) => {
 
 // 10. Tampilkan semua produk ketika halaman pertama kali dibuka
 tampilkanKatalog(katalog);
+
+// 11. Memuat data katalog dari file JSON secara asinkron
+async function muatKatalog() {
+    infoJumlah.textContent = "Memuat katalog...";
+
+    try {
+        const respons = await fetch("data/katalog.json");
+        if (!respons.ok) {
+            throw new Error(`Gagal memuat katalog (HTTP ${respons.status})`);
+        }
+
+        katalog = await respons.json();
+        tampilkanKatalog(katalog);
+    } catch (galat) {
+        console.error(galat);
+        infoJumlah.textContent =
+            "Maaf, katalog gagal dimuat. Periksa koneksi Anda lalu muat ulang halaman.";
+    }
+}
+
+muatKatalog();
